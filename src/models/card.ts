@@ -1,4 +1,4 @@
-interface Card { 
+interface Card {
     id: number;
     status: string;
 }

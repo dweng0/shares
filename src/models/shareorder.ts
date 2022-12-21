@@ -1,4 +1,4 @@
-interface ShareOrder { 
+interface ShareOrder {
     customerId: number;
     shares: number;
 }

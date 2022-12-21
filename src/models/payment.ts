@@ -4,6 +4,6 @@ interface Payment {
     date: string;
     amount: number;
     fee: number;
-    card: Card;    
+    card: Card;
     isSuccessful: boolean;
 }
