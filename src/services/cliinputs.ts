@@ -1,4 +1,4 @@
-import { platform } from 'os';
+import { platform } from './platform';
 import { getCLI } from './cli';
 import { errorBoundary } from './errorboundary';
 /**
