@@ -1,3 +1,4 @@
+import { platform } from 'os';
 import { getCLI } from './cli';
 import { errorBoundary } from './errorboundary';
 /**
@@ -21,5 +22,7 @@ export const cliInputs = () => {
     // Step 2: Interact with the platform
     console.log('Getting share price for ', share_price.toString());
 
-    // todo interact with platform
+    // Step 3: pass platform service
+    platform(csv_path, source, share_price);
+
 }

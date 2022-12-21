@@ -1,3 +1,5 @@
+import BigNumber from "bignumber.js";
+
 export enum TransactionType {
     CARD = 'CARD',
     BANK_TRANSFER = 'BANK_TRANSFER'
@@ -12,7 +14,7 @@ export interface TransactionDetails {
 export interface Payment {
     customerId: number;
     date: string;
-    amount: number;
+    amount: BigNumber;
     fee: number;
     transactionDetails:TransactionDetails;
     isSuccessful: boolean;
