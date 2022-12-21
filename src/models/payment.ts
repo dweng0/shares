@@ -1,15 +1,15 @@
-enum TransactionType {
+export enum TransactionType {
     CARD = 'CARD',
     BANK_TRANSFER = 'BANK_TRANSFER'
 }
 
-interface TransactionDetails {
+export interface TransactionDetails {
     transactionType: TransactionType;
     card?: Card;
     bankTransfer?: BankTransfer;
 }
 
-interface Payment {
+export interface Payment {
     customerId: number;
     date: string;
     amount: number;

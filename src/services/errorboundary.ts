@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js';
 import fs from 'fs';
+import { TransactionType } from '../models/payment';
 
 interface SanitizedInputs {
     csv_path: string;
@@ -16,10 +17,11 @@ interface SanitizedInputs {
  * @param csv_path Path to the payments CSV file
  * @param source The source of the payment, {@see TransactionType}
  * @param share_price Share price to generate share orders for e.g. "1.30"
+ * @param checker A dependency injected function that checks if a file exists
  * @returns the sanitized inputs and an array of errors - this will be empty if there are no errors
  */
-export const errorBoundary = (csv_path: unknown, source: unknown, share_price: unknown): SanitizedInputs => {
-
+export const errorBoundary = (csv_path: unknown, source: unknown, share_price: unknown, checker?: (path: string) => boolean): SanitizedInputs => {
+    const fileCheck = checker || fs.existsSync;
     // set defaults
     const sanitizedInputs: SanitizedInputs = {
         csv_path: '',
@@ -30,15 +32,15 @@ export const errorBoundary = (csv_path: unknown, source: unknown, share_price: u
 
    // Step 1: Validate inputs
     if (!csv_path) {
-        sanitizedInputs.errors.push('Please specify a path to the CSV file');
+        sanitizedInputs.errors.push('No CSV path was provided');
     }
 
     if(!source) {
-        sanitizedInputs.errors.push('Please specify a source payment method "card" or "bank"');
+        sanitizedInputs.errors.push('No payment source was provided, please use "card" or "bank"');
     }
 
     if(!share_price) {
-        sanitizedInputs.errors.push('Please specify a share price to generate share orders for');
+        sanitizedInputs.errors.push('No share price was provided');
     }
 
     // Step 2: Sanitize inputs
@@ -55,13 +57,10 @@ export const errorBoundary = (csv_path: unknown, source: unknown, share_price: u
         }
     
         // check file path exists
-        if(!fs.existsSync(csv_path as string)) {
+        if(!fileCheck(csv_path as string)) {
             sanitizedInputs.errors.push('Please specify a valid path to the CSV file');
-        } 
-    
-        // check if file is a csv file
-        if(!csv_path.toString().endsWith('.csv')) {
-            sanitizedInputs.errors.push('Please specify a valid path to the CSV file');
+        }  else if(!csv_path.toString().endsWith('.csv')) {
+            sanitizedInputs.errors.push('Please specify a valid path to the CSV file with the correct file extension');
         } else { 
             // set csv_path
             sanitizedInputs.csv_path = csv_path as string;
