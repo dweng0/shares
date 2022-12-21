@@ -1,31 +1,14 @@
 #!/usr/bin/env node
 
-import chalk from "chalk";
-import clear from "clear";
-import figlet from "figlet";
-import cmd from "commander";
+import { getCLI } from "./services/cli";
 
 
-clear();
-console.log(
-  chalk.yellow(
-    figlet.textSync('Quick Shares', { horizontalLayout: 'full' })
-  )
-);
-
-cmd.program
-  .description("Get share prices")
-  .option('-c, --csv_path', 'Path to the payments CSV file')
-  .option('-s, --source', 'The source of the payment, currently only \"card\" is supported')
-  .option('-p, --share_price', 'Share price to generate share orders for e.g. \"1.30\"')
-  .parse(process.argv);
-
-const options = cmd.program.opts();
+const cmd = getCLI();
+const options = cmd.opts();
 
 if (!process.argv.slice(2).length) {
-  cmd.program.outputHelp();
+  cmd.outputHelp();
 } else { 
-
 /**
  * ========================================
  * CLI ERROR BOUNDARY
