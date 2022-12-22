@@ -1,10 +1,7 @@
 import { writeFile } from "fs/promises";
-import BigNumber from 'bignumber.js';
-import { readFile } from 'fs\promises';
+import { readFile } from 'fs/promises';
 import { Payment } from '../models/payment';
-import { FEE } from '../constants';
-import { getPaymentType } from "src/services/helpers";
-import { buildTransactionDetails } from "src/services/helpers";
+import { generatePayments } from "./paymentprocessor";
 
 const DEFAULT_HEADERS   = ['customer_id', 'shares'];
 const DEFAULT_TYPE      = 'utf-8';
@@ -17,7 +14,13 @@ const DEFAULT_TYPE      = 'utf-8';
  * @param fileWriter the function to use to write the file
  * @returns Promise<boolean>
  */
-export const exportToCsv = (shares: Record<string, number>, filename: string, headers?: string[], fileWriter?: (file: string, content: string, options: {encoding: string}) => Promise<void>): Promise<boolean> => { 
+export const exportToCsv = (
+    shares: Record<string, number>, 
+    filename: string, 
+    headers?: string[], 
+    fileWriter?: (file: string, content: string, options: {encoding: string}) => Promise<void>)
+    : Promise<boolean> => {
+        
     return new Promise((resolve, reject) => {        
         //return false if shares is empty
         if (Object.keys(shares).length === 0) {
@@ -54,27 +57,9 @@ export const exportToCsv = (shares: Record<string, number>, filename: string, he
  * @param fileReader dependency injected function that reads a file and returns a promise
  * @returns {Promise<Payment[]>}
  */
-export const getPaymentsFromCSV = (csv_path: string, fileReader?: (path: string, encoding: string) => Promise<string>): Promise<Payment[]> => {
+export const getPaymentsFromCSV = (csv_path: string, fileReader?: (path: string, encoding: string) => Promise<string>): Promise<void | Payment[]> => {
     const reader = fileReader || readFile;
-    return reader(csv_path, 'utf8')
-        .then((data: string) => {
-            const lines = data.split(/\r?\n/);
-            const payments: Payment[] = [];
-            for (let i = 1; i < lines.length; i++) {
-                const paymentType = getPaymentType(lines[0])
-                const columns = lines[i].split(',');
-                const totalAmount = new BigNumber(columns[2])
-                const payment: Payment = {
-                    customerId: Number(columns[0]),
-                    date: columns[1],
-                    amount: totalAmount,
-                    transactionDetails: buildTransactionDetails(paymentType, columns),
-                    fee: totalAmount.multipliedBy(FEE).toNumber(),
-                }
-                payments.push(payment);
-            }
-            return payments;
-        })
+    return reader(csv_path, 'utf8').then(generatePayments)
         .catch(() => {
             console.log('Failed to read CSV file from upstream, format incorrect')
         });

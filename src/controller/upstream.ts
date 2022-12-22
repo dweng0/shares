@@ -1,3 +1,4 @@
+import { PaymentStatus } from '../models/paymentmethods';
 import { Payment } from '../models/payment';
 import { byPendingPayment } from '../services/helpers';
 import { getRandomInt } from '../__mocks__/demo_mocks';

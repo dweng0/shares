@@ -10,8 +10,8 @@ interface SanitizedInputs {
 }
 
 /**
- * Problem:     We dont know what the users has input into the CLI
- * Solution:    A service that is given the three arguments provided by the user and sanitizes them,
+ * Problem:     We dont know what the users' has input into the CLI
+ * Solution:    A service that is given the three arguments of unknown type provided by the user and we sanitize them,
  * 
  * {@see cliInputs}
  * @param csv_path Path to the payments CSV file

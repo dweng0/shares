@@ -1,7 +1,6 @@
 import { buildTransactionDetails, byBankTransfers, byCardPayments, byNotPendingPayment, byPendingPayment, byprocessedPayment, getPaymentType } from '../helpers';
-import { MOCK_PAYMENT_PARTIAL, MOCK_ROW_BANK_PAYMENT } from "./__mocks__";
 import { TransactionType } from '../../models/payment';
-import { MOCK_ROW_CARD_PAYMENT } from './__mocks__/index';
+import { MOCK_ROW_CARD_PAYMENT, MOCK_PAYMENT_PARTIAL, MOCK_ROW_BANK_PAYMENT } from '../../__mocks__/test.mocks';
 import { PaymentStatus } from '../../models/paymentmethods';
 
 describe("Tests around the helper functions", () => {
