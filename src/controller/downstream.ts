@@ -24,7 +24,7 @@ export const exportToCsv = (
     return new Promise((resolve, reject) => {        
         //return false if shares is empty
         if (Object.keys(shares).length === 0) {
-            resolve(false);
+            return resolve(false);
         }
 
         // setup headers, rows and ls
@@ -37,14 +37,14 @@ export const exportToCsv = (
         // build the file
         const csv   = `${header}\n${row}`;
         const file  = `${filename}.csv`;
-
+        
         // write the file
         const writer = fileWriter ? fileWriter : writeFile;
         writer(file, csv, { encoding: DEFAULT_TYPE }).then(() => {
-            resolve(true);
+            return resolve(true);
         })
         .catch((err) => {
-            reject(err);
+            return reject(err);
         }); 
     });   
 }
