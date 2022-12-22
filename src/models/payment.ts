@@ -17,5 +17,4 @@ export interface Payment {
     amount: BigNumber;
     fee: number;
     transactionDetails:TransactionDetails;
-    isSuccessful: boolean;
 }

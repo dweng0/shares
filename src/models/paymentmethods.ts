@@ -9,8 +9,6 @@ interface PaymentMetaData {
     status: PaymentStatus;
 }
 
-interface BankTransfer extends PaymentMetaData {
-    awaitingResponse: boolean;
-}
+interface BankTransfer extends PaymentMetaData {}
 
 interface Card extends PaymentMetaData {}

@@ -1,6 +1,9 @@
 import BigNumber from "bignumber.js";
-import { readFile } from "fs/promises";
-import { Payment, TransactionType } from "../models/payment";
+import { Payment } from "../models/payment";
+import { byBankTransfers, byCardPayments, byNotPendingPayment, byPendingPayment } from "./helpers";
+import { getRandomInt } from '../__mocks__/demo_mocks';
+import { DEFAULT_SHARES_FILENAME } from '../constants';
+import { exportToCsv, getPaymentsFromCSV } from '../controller/io';
 
 /**
  * Platform service
@@ -10,64 +13,90 @@ import { Payment, TransactionType } from "../models/payment";
  * @param share_price 
  * @returns 
  */
-export const platform = (csv_path: string, source: TransactionType, share_price: BigNumber) => {
+export const platform = async (csv_path: string, share_price: BigNumber) => {
 
     // Step 1: Read CSV file
-    const payments = getPaymentsFromCSV(csv_path)
+    const payments = await getPaymentsFromCSV(csv_path)
 
     // Step 2: Filter payments
-    const filteredPayments = filterPayments(payments, source);
+    const cardPayments = payments.filter(byCardPayments)
+    const bankTransferPayments = payments.filter(byBankTransfers);
 
-    // Step 3: Generate share orders
-    const shareOrders = generateShareOrders(filteredPayments, share_price);
+    // Step 3: Wait for pending bank transfers to complete
+    const processedBankTransferPayments =  await getBankTransferResults(bankTransferPayments.filter(byPendingPayment));
 
-    // Step 4: Write share orders to CSV file
-    return writeCSV(shareOrders);
+    // Step 4: Spread all results back into a single array
+    const processedPayments = [
+        ...cardPayments.filter(byNotPendingPayment), 
+        ...bankTransferPayments.filter(byNotPendingPayment), 
+        ...processedBankTransferPayments];
+
+    // Step 5: Generate share orders
+    const shareOrders = generateShareOrders(processedPayments, share_price);
+
+    // Step 6: Write share orders to CSV file
+    const success = exportToCsv(shareOrders, DEFAULT_SHARES_FILENAME, ['customer_id', 'shares']);
+    if(success) {
+        console.log('Share orders exported to CSV file');
+    } else {
+        console.log('Failed to export share orders to CSV file');
+    }
+    return;
 }
-
 
 /**
- * IT: reads a csv file and returns an array of payments
- * 
- * @param csv_path the path to the file
- * @param fileReader dependency injected function that reads a file and returns a promise
- * @returns {Promise<Payment[]>}
+ * IT: returns a promise that resolves when all pending bank transfers are complete
  */
-export const getPaymentsFromCSV = (csv_path: string, fileReader?: (path: string, encoding: string) => Promise<string>): Promise<Payment[]> => {
-    const reader = fileReader || readFile;
-    return reader(csv_path, 'utf8')
-        .then(data => {
-            const lines = data.split(/\r?\n/);
-            const payments: Payment[] = [];
-            for (let i = 1; i < lines.length; i++) {
-                const paymentType = getPaymentType(lines[0])
-                const columns = lines[i].split(',');
-                const payment: Payment = {
-                    customerId: Number(columns[0]),
-                    date: columns[1],
-                    amount: new BigNumber(columns[2]),
-                    currency: columns[3],
-                    source: columns[4]
-                }
-                payments.push(payment);
-            }
-            return payments;
-        })
-        .catch(err => {
-            console.log('failed to read CSV file')
-            return [];
-        });
+const getBankTransferResult = (payment: Payment): Promise<Payment> => {    
+    // This is a MOCK that pretends to wait some time before reolving the promise and updating the payment method to processed
+    //fetch(`api/thing').then(res => res.json())    
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            console.log('Bank transfer ' + payment.transactionDetails.bankTransfer.id + ' is complete')
+            payment.transactionDetails.bankTransfer.status = PaymentStatus.processed;
+            resolve(payment);
+        }, getRandomInt(500, 5000));
+    });
 }
 
-export const getPaymentType = (header: string): TransactionType => {
-    const columns = header.split(',');
-    switch (columns[3]) { 
-        case 'card_id':
-            return TransactionType.CARD;
-        case 'bank_account_id':
-            return TransactionType.BANK_TRANSFER;
-        default:
-            throw 
-            return TransactionType.CARD;
-    }
+/**
+ * IT: uses a promise all and calls getBankTransferResult for each pending bank transfer
+ * @param payments 
+ */
+const getBankTransferResults = (payments: Payment[]): Promise<Payment[]> => {
+    const pendingBankTransfers = payments.filter(byPendingPayment);
+    console.log('There are ' + pendingBankTransfers.length + ' pending bank transfers')
+    return Promise.all(pendingBankTransfers.map(getBankTransferResult));
 }
+
+/**
+ * Builds the share hashmap
+ * @param processedPayments list of processed payments {@see Payment} 
+ * @param share_price
+ * @returns 
+ */
+const generateShareOrders = (processedPayments: Payment[], share_price: BigNumber): Record<string, number>=> {
+    const shareOrders: Record<string, number> = {};
+    
+    return processedPayments.reduce((acc, payment, currentIndex) => {      
+        if(!acc[payment.customerId]) {
+            acc[payment.customerId] = 0;
+        }
+
+        console.log(`Building shares ~${(currentIndex / processedPayments.length) * 100})% complete`);
+        
+        // take the current shares and add this payments' shares to it.
+        const additionalShares = payment.amount.dividedBy(share_price).plus(acc[payment.customerId]);
+        acc[payment.customerId] = additionalShares.toNumber();
+        return acc;
+    }, shareOrders);
+}
+
+/**
+ * Write a new csv file that prints out Record<string, number>, with headers "customer_id", "shares"
+ */
+export const writeToCSV = (shares: Record<string, number>, fileName): Promise<boolean> => { 
+
+
+}
+
