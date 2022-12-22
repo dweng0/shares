@@ -1,9 +1,9 @@
 import BigNumber from "bignumber.js";
 import { Payment } from "../models/payment";
 import { byBankTransfers, byCardPayments, byNotPendingPayment, byPendingPayment } from "./helpers";
-import { getRandomInt } from '../__mocks__/demo_mocks';
 import { DEFAULT_SHARES_FILENAME } from '../constants';
-import { exportToCsv, getPaymentsFromCSV } from '../controller/io';
+import { exportToCsv, getPaymentsFromCSV } from '../controller/downstream';
+import { getBankTransferResults } from "../controller/upstream";
 
 /**
  * Platform service
@@ -44,30 +44,6 @@ export const platform = async (csv_path: string, share_price: BigNumber) => {
     return;
 }
 
-/**
- * IT: returns a promise that resolves when all pending bank transfers are complete
- */
-const getBankTransferResult = (payment: Payment): Promise<Payment> => {    
-    // This is a MOCK that pretends to wait some time before reolving the promise and updating the payment method to processed
-    //fetch(`api/thing').then(res => res.json())    
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            console.log('Bank transfer ' + payment.transactionDetails.bankTransfer.id + ' is complete')
-            payment.transactionDetails.bankTransfer.status = PaymentStatus.processed;
-            resolve(payment);
-        }, getRandomInt(500, 5000));
-    });
-}
-
-/**
- * IT: uses a promise all and calls getBankTransferResult for each pending bank transfer
- * @param payments 
- */
-const getBankTransferResults = (payments: Payment[]): Promise<Payment[]> => {
-    const pendingBankTransfers = payments.filter(byPendingPayment);
-    console.log('There are ' + pendingBankTransfers.length + ' pending bank transfers')
-    return Promise.all(pendingBankTransfers.map(getBankTransferResult));
-}
 
 /**
  * Builds the share hashmap
@@ -91,12 +67,3 @@ const generateShareOrders = (processedPayments: Payment[], share_price: BigNumbe
         return acc;
     }, shareOrders);
 }
-
-/**
- * Write a new csv file that prints out Record<string, number>, with headers "customer_id", "shares"
- */
-export const writeToCSV = (shares: Record<string, number>, fileName): Promise<boolean> => { 
-
-
-}
-
