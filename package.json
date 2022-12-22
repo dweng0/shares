@@ -1,11 +1,13 @@
 {
-  "name": "sharestocsv",
+  "name": "shares",
   "dependencies": {
+    "@types/inquirer": "^9.0.3",
     "bignumber.js": "^9.1.1",
     "chalk": "^4.1.2",
     "clear": "^0.1.0",
     "commander": "^9.4.1",
     "figlet": "^1.5.2",
+    "inquirer": "^9.1.4",
     "nodemon": "^2.0.20",
     "path": "^0.12.7"
   },
@@ -28,8 +30,8 @@
   "scripts": {
     "start": "nodemon --watch 'src/**/*.ts' --exec \"npx ts-node\" src/index.ts",
     "create": "npm run build && npm run test",
+    "docs": "npx typedoc",
     "build": "tsc -p .",
-    "local": "sudo npm i -g && pizza",
     "refresh": "rm -rf ./node_modules ./package-lock.json && npm install",
     "test": "jest"
   }
