@@ -1,3 +1,4 @@
+import { PaymentStatus } from '../models/paymentmethods';
 import { Payment, TransactionType, TransactionDetails } from '../models/payment';
 
 
@@ -45,7 +46,7 @@ export const getPaymentType = (header: string): TransactionType => {
         case 'bank_account_id':
             return TransactionType.BANK_TRANSFER;
         default:
-            return TransactionType.CARD;
+            return TransactionType.UNKNOWN;
     }
 }
 
@@ -65,7 +66,7 @@ export const buildTransactionDetails = (paymentType: TransactionType, columns: s
             }
         }
     } 
-    // if its a bank transfer, set the status to pending
+    // if its a bank transfer, set the status to pending and query for it later
     return {
         transactionType: TransactionType.BANK_TRANSFER,
         bankTransfer: {

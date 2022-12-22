@@ -13,7 +13,7 @@ export const cliInputs = () => {
     const   options = cmd.opts();
 
     // Step 1: Error boundary
-    const {csv_path, source, share_price, errors} = errorBoundary(options.csv_path, options.source, options.share_price);
+    const {csv_path, share_price, errors} = errorBoundary(options.csv_path, options.source, options.share_price);
     if(errors.length) {
         console.log(errors.reduce((acc, curr) => `${acc}, ${curr}`));
         return;
@@ -23,6 +23,6 @@ export const cliInputs = () => {
     console.log('Getting share price for ', share_price.toString());
 
     // Step 3: pass platform service
-    platform(csv_path, source, share_price);
+    platform(csv_path, share_price);
 
 }
