@@ -13,14 +13,19 @@ import { generateShareOrders } from "../controller/shares";
  * @param share_price 
  * @returns 
  */
-export const platform = async (csv_path: string, share_price: BigNumber) => {
+export const platform = async (csv_path: string, share_price: BigNumber): Promise<number> => {
 
     // Step 1: Read CSV file
-    const payments = await getPaymentsFromCSV(csv_path)
+    let payments;
+    try {
+        payments = await getPaymentsFromCSV(csv_path);
+    } catch {
+        return 1;
+    }
 
     if(!payments || payments.length === 0) {
         console.log('No payments found in CSV file');
-        return
+        return 1;
     }
 
     // Step 2: Filter payments
@@ -45,6 +50,7 @@ export const platform = async (csv_path: string, share_price: BigNumber) => {
         console.log('Share orders exported to CSV file');
     } else {
         console.log('Failed to export share orders to CSV file');
+        return 1;
     }
-    return;
+    return 0;
 }

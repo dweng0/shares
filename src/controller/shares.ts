@@ -4,7 +4,7 @@ import { Payment } from '../models/payment';
 /**
  * Builds the share hashmap by reducing the payments array into a hashmap (record obj in TS)
  * NOTE: The CLI tool writes any console logs to the shell.
- * @param processedPayments list of processed payments {@see Payment} 
+ * @param processedPayments list of processed payments
  * @param share_price
  * @returns Share order: Record<customer_id, amount>
  */

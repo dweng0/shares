@@ -12,10 +12,9 @@ interface SanitizedInputs {
 /**
  * Problem:     We dont know what the users' has input into the CLI
  * Solution:    A service that is given the three arguments of unknown type provided by the user and we sanitize them,
- * 
- * {@see cliInputs}
+ * @see TransactionType
  * @param csv_path Path to the payments CSV file
- * @param source The source of the payment, {@see TransactionType}
+ * @param source The source of the payment
  * @param share_price Share price to generate share orders for e.g. "1.30"
  * @param checker A dependency injected function that checks if a file exists
  * @returns the sanitized inputs and an array of errors - this will be empty if there are no errors
@@ -45,6 +44,7 @@ export const errorBoundary = (csv_path: unknown, source: unknown, share_price: u
 
     // Step 2: Sanitize inputs
     try { 
+        console.log('share price is ', share_price)
         if(new BigNumber(share_price as string).isNaN()) {
             sanitizedInputs.errors.push('Please specify a valid share price to generate share orders for');
         }

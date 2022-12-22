@@ -35,8 +35,9 @@ export const byprocessedPayment = (payment: Payment) => (payment.transactionDeta
 
 /**
  * IT: returns the Transaction type based on the payment header provided
+ * @see TransactionType
  * @param header 
- * @returns {@see TransactionType}
+ * @returns 
  */
 export const getPaymentType = (header: string): TransactionType => {
     const columns = header.split(',');
@@ -52,9 +53,11 @@ export const getPaymentType = (header: string): TransactionType => {
 
 /**
  * IT: Builds transaction details 
- * @param paymentType the type of transaction {@see TransactionType}
+ * @see TransactionDetails
+ * @see TransactionType
+ * @param paymentType the type of transaction
  * @param columns The columns for this row of items.
- * @returns {@see TransactionDetails}
+ * @returns
  */
 export const buildTransactionDetails = (paymentType: TransactionType, columns: string[]): TransactionDetails => {
     if(paymentType === TransactionType.CARD) {
