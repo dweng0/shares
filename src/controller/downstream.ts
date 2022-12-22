@@ -49,7 +49,6 @@ export const exportToCsv = (
     });   
 }
 
-
 /**
  * IT: reads a csv file and returns an array of payments
  * 

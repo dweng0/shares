@@ -16,7 +16,7 @@ export const generateShareOrders = (processedPayments: Payment[], share_price: B
             acc[payment.customerId] = 0;
         }
 
-        console.log(`Building shares ~${(currentIndex / processedPayments.length) * 100})% complete`);
+        console.log(`Building shares ~${BigNumber(currentIndex).dividedBy(processedPayments.length).multipliedBy(100).toFixed(2)}% complete`);
         
         // take the current shares and add this payments' shares to it.
         const additionalShares = payment.amount.dividedBy(share_price).plus(acc[payment.customerId]);
