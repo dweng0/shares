@@ -17,6 +17,9 @@
     "include": [
         "src/**/*"
     ],
+    "ignore": [
+        "src/**/*.test.ts"
+    ],
     "typedocOptions": {
         "entryPoints": ["src/index.ts", "src/controller/**/*", "src/models/**/*", "src/services/**/*"],
         "out": "docs"

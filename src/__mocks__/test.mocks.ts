@@ -1,6 +1,7 @@
 
 import { PaymentStatus } from '../models/paymentmethods';
 import { Payment, TransactionType } from '../models/payment';
+import BigNumber from 'bignumber.js';
 
 export const MOCK_CARD_PAYMENT_STRING = "customer_id,date,amount,card_id,card_status\n" +
     "123,2019-01-12,900,30,processed\n" +
@@ -11,9 +12,28 @@ export const MOCK_BANK_PAYMENT_STRING = "customer_id,date,amount,bank_account_id
     "789,2018-10-25,900,20\n" +
     "345,2018-11-03,900,60\n"
 
+export const MOCK_PAYMENT_ERR: Partial<Payment>[] = [
+    { 
+        fee: 0.5,
+        customerId: 1,
+        transactionDetails: {
+            transactionType: TransactionType.BANK_TRANSFER,
+        }
+    },
+    { 
+        fee: 0.5,
+        customerId: 1,
+        transactionDetails: {
+            transactionType: TransactionType.CARD,
+        }
+    },
+]
+
 
 export const MOCK_PAYMENT_PARTIAL: Partial<Payment>[] = [
     { 
+        date: "2019-01-12",
+        amount: new BigNumber(100),
         fee: 0.5,
         customerId: 1,
         transactionDetails: {
@@ -25,6 +45,10 @@ export const MOCK_PAYMENT_PARTIAL: Partial<Payment>[] = [
         }
     },
     { 
+        date: "2019-01-12",
+        amount: new BigNumber(100),
+        fee: 0.5,
+        customerId: 1,
         transactionDetails: {
             transactionType: TransactionType.CARD,
             card: {
@@ -34,6 +58,10 @@ export const MOCK_PAYMENT_PARTIAL: Partial<Payment>[] = [
         }
     },
     { 
+        date: "2019-01-12",
+        amount: new BigNumber(100),
+        fee: 0.5,
+        customerId: 2,
         transactionDetails: {
             transactionType: TransactionType.BANK_TRANSFER,
             bankTransfer: {
@@ -43,6 +71,10 @@ export const MOCK_PAYMENT_PARTIAL: Partial<Payment>[] = [
         }
     },
     { 
+        date: "2019-01-12",
+        amount: new BigNumber(100),
+        fee: 0.5,
+        customerId: 2,
         transactionDetails: {
             transactionType: TransactionType.CARD,
             card: {
@@ -52,6 +84,10 @@ export const MOCK_PAYMENT_PARTIAL: Partial<Payment>[] = [
         }
     },
     { 
+        date: "2019-01-12",
+        amount: new BigNumber(100),
+        fee: 0.5,
+        customerId: 3,
         transactionDetails: {
             transactionType: TransactionType.BANK_TRANSFER,
             bankTransfer: {

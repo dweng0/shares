@@ -22,16 +22,16 @@ export const byCardPayments = (payment: Payment) => payment.transactionDetails.t
  * @returns Payment[]
  */
 export const byPendingPayment = (payment: Payment) => (payment.transactionDetails.transactionType === TransactionType.CARD) 
-? payment.transactionDetails.card.status ===  PaymentStatus.pending
-: payment.transactionDetails.bankTransfer.status ===  PaymentStatus.pending;
+? payment.transactionDetails.card?.status ===  PaymentStatus.pending
+: payment.transactionDetails.bankTransfer?.status ===  PaymentStatus.pending;
 
 export const byNotPendingPayment = (payment: Payment) => (payment.transactionDetails.transactionType === TransactionType.CARD) 
-? payment.transactionDetails.card.status !==  PaymentStatus.pending
-: payment.transactionDetails.bankTransfer.status !==  PaymentStatus.pending;
+? payment.transactionDetails.card && payment.transactionDetails.card.status !==  PaymentStatus.pending
+:  payment.transactionDetails.bankTransfer && payment.transactionDetails.bankTransfer.status !==  PaymentStatus.pending;
 
 export const byprocessedPayment = (payment: Payment) => (payment.transactionDetails.transactionType === TransactionType.CARD)
-? payment.transactionDetails.card.status === PaymentStatus.processed
-: payment.transactionDetails.bankTransfer.status ===  PaymentStatus.processed;
+? payment.transactionDetails.card?.status === PaymentStatus.processed
+: payment.transactionDetails.bankTransfer?.status ===  PaymentStatus.processed;
 
 /**
  * Filters out any malformed payments

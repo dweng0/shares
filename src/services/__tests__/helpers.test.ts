@@ -1,6 +1,6 @@
-import { buildTransactionDetails, byBankTransfers, byCardPayments, byNotPendingPayment, byPendingPayment, byprocessedPayment, getPaymentType } from '../helpers';
+import { buildTransactionDetails, byBankTransfers, byCardPayments, byNotPendingPayment, byPendingPayment, byprocessedPayment, getPaymentType, outMalformedPayments } from '../helpers';
 import { TransactionType } from '../../models/payment';
-import { MOCK_ROW_CARD_PAYMENT, MOCK_PAYMENT_PARTIAL, MOCK_ROW_BANK_PAYMENT } from '../../__mocks__/test.mocks';
+import { MOCK_ROW_CARD_PAYMENT, MOCK_PAYMENT_PARTIAL, MOCK_ROW_BANK_PAYMENT, MOCK_PAYMENT_ERR } from '../../__mocks__/test.mocks';
 import { PaymentStatus } from '../../models/paymentmethods';
 
 describe("Tests around the helper functions", () => {
@@ -28,12 +28,40 @@ describe("Tests around the helper functions", () => {
         expect(pending.length).toEqual(2);
     });
 
+    it("Should return undefined if transaction details are undefined", () => {
+       // setup, execute
+       const pending = MOCK_PAYMENT_ERR.filter(byPendingPayment);
+       const notPending = MOCK_PAYMENT_ERR.filter(byNotPendingPayment);
+       // verify
+       expect(pending.length).toEqual(0);
+       expect(notPending.length).toEqual(0);
+    })
+    
+
     it("Should filter by processedPayment", () => {
         // setup, execute
         const processed = MOCK_PAYMENT_PARTIAL.filter(byprocessedPayment);
 
         // verify
         expect(processed.length).toEqual(2);
+    });
+
+    it("Should only return data that is properly formed", () => {
+        // setup, execute
+        const notFormed = MOCK_PAYMENT_ERR.filter(outMalformedPayments);
+        const formed = MOCK_PAYMENT_PARTIAL.filter(outMalformedPayments);
+
+        // verify
+        expect(notFormed.length).toEqual(0);
+        expect(formed.length).toEqual(5);
+    });
+
+    it("Should return undefined if the TX details are not defined properly", () => { 
+        // setup, execute
+        const processed = MOCK_PAYMENT_ERR.filter(byprocessedPayment);
+
+        // verify
+        expect(processed.length).toEqual(0);
     });
 
     it("Should filter by not pending payments", () => {
