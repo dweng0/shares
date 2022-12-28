@@ -1,7 +1,10 @@
+/**
+ * Enumeration of the different payment statuses
+ */
 export enum PaymentStatus { 
-    pending = 'pending',
-    rejected = 'declined',
-    processed = 'processed'
+    pending     = 'pending',
+    rejected    = 'declined',
+    processed   = 'processed'
 }
 
 interface PaymentMetaData {
@@ -9,5 +12,5 @@ interface PaymentMetaData {
     status: PaymentStatus;
 }
 
-export interface BankTransfer extends PaymentMetaData {}
-export interface Card extends PaymentMetaData {}
+export interface BankTransfer   extends PaymentMetaData {}
+export interface Card           extends PaymentMetaData {}

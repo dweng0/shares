@@ -7,7 +7,7 @@ export interface Answers {
 }
 
 /**
- * CLI UI that uses inquirer instead of Commander 
+ * CLI UI that uses inquirer to query the user for inputs
  * @returns a Promise of Answers (Options)
  */
 const inputCLI = (): Promise<Answers> => {

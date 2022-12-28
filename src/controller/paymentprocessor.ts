@@ -1,8 +1,10 @@
-import { Payment } from "../models/payment";
-import BigNumber from 'bignumber.js';
-import { FEE } from '../constants';
-import { getPaymentType, buildTransactionDetails } from '../services/helpers';
-import { TransactionType } from "../models/payment";
+import { Payment }              from "../models/payment";
+import BigNumber                from 'bignumber.js';
+import { FEE }                  from '../constants';
+import { 
+    getPaymentType, 
+    buildTransactionDetails }   from '../services/helpers';
+import { TransactionType }      from "../models/payment";
 
 /**
  * Generates a payment object from a csv row

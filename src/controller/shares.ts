@@ -1,5 +1,5 @@
-import BigNumber from 'bignumber.js';
-import { Payment } from '../models/payment';
+import BigNumber    from 'bignumber.js';
+import { Payment }  from '../models/payment';
 
 /**
  * Builds the share hashmap by reducing the payments array into a hashmap (record obj in TS)

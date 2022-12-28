@@ -1,12 +1,17 @@
-import BigNumber from "bignumber.js";
-import { byBankTransfers, byCardPayments, byNotPendingPayment, byPendingPayment, outMalformedPayments } from "./helpers";
-import { DEFAULT_SHARES_FILENAME } from '../constants';
-import { exportToCsv, getPaymentsFromCSV } from '../controller/downstream';
-import { getBankTransferResults } from "../controller/upstream";
-import { generateShareOrders } from "../controller/shares";
+import BigNumber                            from "bignumber.js";
+import { DEFAULT_SHARES_FILENAME }          from '../constants';
+import { exportToCsv, getPaymentsFromCSV }  from '../controller/downstream';
+import { getBankTransferResults }           from "../controller/upstream";
+import { generateShareOrders }              from "../controller/shares";
+import { 
+    byBankTransfers,
+    byCardPayments,
+    byNotPendingPayment,
+    byPendingPayment,
+    outMalformedPayments }                  from "./helpers";
 
 /**
- * Platform service
+ * Platform service, calls services to read the csv file, build a a payments array and write the csv file
  * NOTE: The CLI tool writes any console logs to the shell.
  * @param csv_path 
  * @param source 

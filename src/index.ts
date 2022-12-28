@@ -2,4 +2,5 @@
 
 import { cliInputs } from './services/cliinputs';
 
+// runs the script
 cliInputs();

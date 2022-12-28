@@ -1,16 +1,16 @@
-import BigNumber from 'bignumber.js';
-import fs from 'fs';
-import { TransactionType } from '../models/payment';
+import BigNumber            from 'bignumber.js';
+import fs                   from 'fs';
+import { TransactionType }  from '../models/payment';
 
 interface SanitizedInputs {
-    csv_path: string;
-    source: TransactionType;
-    share_price: BigNumber;
-    errors: string[];
+    csv_path:       string;
+    source:         TransactionType;
+    share_price:    BigNumber;
+    errors:         string[];
 }
 
 /**
- * Problem:     We dont know what the users' has input into the CLI
+ * Problem:     We dont know what the user has input into the CLI
  * Solution:    A service that is given the three arguments of unknown type provided by the user and we sanitize them,
  * @see TransactionType
  * @param csv_path Path to the payments CSV file

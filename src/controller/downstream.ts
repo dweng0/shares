@@ -1,6 +1,6 @@
-import { writeFile } from "fs/promises";
-import { readFile } from 'fs/promises';
-import { Payment } from '../models/payment';
+import { writeFile }        from "fs/promises";
+import { readFile }         from 'fs/promises';
+import { Payment }          from '../models/payment';
 import { generatePayments } from "./paymentprocessor";
 
 const DEFAULT_HEADERS   = ['customer_id', 'shares'];

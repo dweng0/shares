@@ -1,6 +1,9 @@
-import { PaymentStatus } from '../models/paymentmethods';
+import { PaymentStatus }                                from '../models/paymentmethods';
 import { Payment, TransactionType, TransactionDetails } from '../models/payment';
 
+/**
+ * Helper functions for our payment arrays (filters, maps etc)
+ */
 
 /**
  * Filter method that returns true if the payment is a bank transfer
