@@ -6,7 +6,6 @@ describe("CLI tests", () => {
         cli.stdin.write("");
         cli.stdin.end();
         cli.stdout.on("data", data => {
-            console.debug(data.toString())
             expect(data.toString()).toContain("Quick Shares lol");
         }
         );

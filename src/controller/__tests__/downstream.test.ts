@@ -83,6 +83,36 @@ describe("Tests for downstream controller", () => {
         await expect(throwable).rejects.toEqual("File is empty");
     });
 
+    it("Should use the default file writer if no DI one is provided", async () => {
+        
+        // setup
+        const fileName          = `${__dirname}/__output__/jest_test_output`;
+        const payments          = generatePayments(MOCK_CARD_PAYMENT_STRING);
+        const shares            = generateShareOrders(payments, new BigNumber(100));
+        const headers           = ['customerId', 'shares'];
+        
+        // execute
+        const result = await exportToCsv(shares, fileName, headers);
+
+        // verify we call the file writer
+        expect(result).toEqual(true);
+    });
+
+    it("Should use the default file reader if no DI one is provided", async () => {
+        
+        // setup
+        const fileName          = `${__dirname}/__input__/jest_test_input.csv`;        
+        // execute
+        const results = await getPaymentsFromCSV(fileName);
+
+        // verify we call the file writer
+        expect(results).toBeDefined();
+        if(results) {
+            expect(results.length).toEqual(3);
+            expect(results[0].customerId).toEqual(123);
+        }
+    });
+
     it("Should use default headers if none are provided", async () => {
         // setup
         const mockFileWriter    = jest.fn().mockResolvedValue(null);

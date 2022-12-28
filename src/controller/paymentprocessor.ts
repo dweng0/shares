@@ -30,9 +30,12 @@ export const generatePayments = (content: string): Payment[] => {
     const lines = content.split(/\r?\n/);
     const payments: Payment[] = [];
     for (let i = 1; i < lines.length; i++) {
-        const paymentType = getPaymentType(lines[0])
-        const cells = lines[i].split(',');
-        payments.push(generatePayment(cells, paymentType));
+         // ignore empty lines (e.g. last line)
+        if(lines[i] !== '') {
+            const paymentType = getPaymentType(lines[0])
+            const cells = lines[i].split(',');
+            payments.push(generatePayment(cells, paymentType));
+        }
     }
     return payments;
 }

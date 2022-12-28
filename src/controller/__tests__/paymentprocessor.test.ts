@@ -13,7 +13,6 @@ describe("Tests for create payment objects from content strings", () => {
 
         // execute
         const payment = generatePayment(cells, paymentType);
-        console.debug(payment);
         // verify
         expect(payment.customerId).toEqual(1);
         expect(payment.date).toEqual('2020-01-01');
@@ -32,6 +31,18 @@ describe("Tests for create payment objects from content strings", () => {
         expect(payments[0].customerId).toEqual(123);
         expect(payments[0].date).toEqual('2019-01-12');
         expect(payments[0].amount.toString()).toEqual("900");        
+    });
+
+    it("Should ignore empty lines", () => {
+        // setup
+        const mockString = `1,2020-01-01,100,1234567890,processed\n1,2020-01-01,100,1234567890,processed\n`;
+        const mockStringWithEmptyLine = mockString + `\n\n`;
+
+        // execute
+        const payments = generatePayments(mockStringWithEmptyLine);
+
+        // verify
+        expect(payments.length).toEqual(1);
     });
         
 });

@@ -23,6 +23,7 @@ describe("Tests for grabbing data from upstream", () => {
         const bankPayments = MOCK_PAYMENT_PARTIAL
                 .filter(byBankTransfers)
                 .filter(byPendingPayment)
+
         // execute
         const result = await getBankTransferResults(bankPayments as Payment[]);
 
