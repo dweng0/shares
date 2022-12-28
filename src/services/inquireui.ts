@@ -21,7 +21,7 @@ const inputCLI = (): Promise<Answers> => {
             type: "list",
             choices: ["card", "bank"],
             name: "source",
-            message: "The source of the payment, currently only \"card\" is supported"
+            message: "The source of the payment"
         },
         {
             type: "input",
