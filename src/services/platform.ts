@@ -29,8 +29,9 @@ export const platform = async (csv_path: string, share_price: BigNumber): Promis
     }
 
     // Step 2: Filter payments
-    const cardPayments = payments.filter(byCardPayments)
-    const bankTransferPayments = payments.filter(byBankTransfers);
+    const cleanPayments = payments.filter(outMalformedPayments)
+    const cardPayments = cleanPayments.filter(byCardPayments)
+    const bankTransferPayments = cleanPayments.filter(byBankTransfers);
 
     // Step 3: Wait for pending bank transfers to complete
     const processedBankTransferPayments =  await getBankTransferResults(bankTransferPayments.filter(byPendingPayment));
@@ -42,15 +43,9 @@ export const platform = async (csv_path: string, share_price: BigNumber): Promis
         ...processedBankTransferPayments];
 
     // Step 5: Generate share orders
-    const shareOrders = generateShareOrders(processedPayments.filter(outMalformedPayments), share_price);
+    const shareOrders = generateShareOrders(processedPayments, share_price);
 
     // Step 6: Write share orders to CSV file
-    const success = exportToCsv(shareOrders, DEFAULT_SHARES_FILENAME, ['customer_id', 'shares']);
-    if(success) {
-        console.log('Share orders exported to CSV file');
-    } else {
-        console.log('Failed to export share orders to CSV file');
-        return 1;
-    }
+    exportToCsv(shareOrders, DEFAULT_SHARES_FILENAME, ['customer_id', 'shares']);    
     return 0;
 }
