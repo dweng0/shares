@@ -44,7 +44,6 @@ export const errorBoundary = (csv_path: unknown, source: unknown, share_price: u
 
     // Step 2: Sanitize inputs
     try { 
-        console.log('share price is ', share_price)
         if(new BigNumber(share_price as string).isNaN()) {
             sanitizedInputs.errors.push('Please specify a valid share price to generate share orders for');
         }
@@ -55,15 +54,15 @@ export const errorBoundary = (csv_path: unknown, source: unknown, share_price: u
             // set share_price
             sanitizedInputs.share_price = new BigNumber(share_price as string);
         }
-    
+        const path = csv_path as string;
         // check file path exists
-        if(!fileCheck(csv_path as string)) {
+        if(!fileCheck(path)) {
             sanitizedInputs.errors.push('Please specify a valid path to the CSV file');
-        }  else if(!csv_path.toString().endsWith('.csv')) {
+        }  else if(!path.toString().endsWith('.csv')) {
             sanitizedInputs.errors.push('Please specify a valid path to the CSV file with the correct file extension');
         } else { 
             // set csv_path
-            sanitizedInputs.csv_path = csv_path as string;
+            sanitizedInputs.csv_path = path;
         }
 
     } catch (e) {

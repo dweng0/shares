@@ -34,6 +34,19 @@ export const byprocessedPayment = (payment: Payment) => (payment.transactionDeta
 : payment.transactionDetails.bankTransfer.status ===  PaymentStatus.processed;
 
 /**
+ * Filters out any malformed payments
+ * @param payment 
+ * @returns 
+ */
+export const outMalformedPayments = (payment: Payment) => (payment.customerId && payment.customerId !== 0
+    && payment.date
+    && payment.amount
+    && payment.fee
+    && payment.transactionDetails.transactionType !== TransactionType.UNKNOWN
+    )
+    
+
+/**
  * IT: returns the Transaction type based on the payment header provided
  * @see TransactionType
  * @param header 

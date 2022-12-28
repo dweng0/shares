@@ -1,5 +1,5 @@
 import BigNumber from "bignumber.js";
-import { byBankTransfers, byCardPayments, byNotPendingPayment, byPendingPayment } from "./helpers";
+import { byBankTransfers, byCardPayments, byNotPendingPayment, byPendingPayment, outMalformedPayments } from "./helpers";
 import { DEFAULT_SHARES_FILENAME } from '../constants';
 import { exportToCsv, getPaymentsFromCSV } from '../controller/downstream';
 import { getBankTransferResults } from "../controller/upstream";
@@ -42,7 +42,7 @@ export const platform = async (csv_path: string, share_price: BigNumber): Promis
         ...processedBankTransferPayments];
 
     // Step 5: Generate share orders
-    const shareOrders = generateShareOrders(processedPayments, share_price);
+    const shareOrders = generateShareOrders(processedPayments.filter(outMalformedPayments), share_price);
 
     // Step 6: Write share orders to CSV file
     const success = exportToCsv(shareOrders, DEFAULT_SHARES_FILENAME, ['customer_id', 'shares']);

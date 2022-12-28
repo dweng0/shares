@@ -16,7 +16,6 @@ export const cliInputs = async () => {
         console.log(errors.reduce((acc, curr) => `${acc}\n${curr}`));
         return;
     }
-    console.log(2)
 
     // Step 2: Interact with the platform
     console.log('Getting share price for ', share_price.toString());
