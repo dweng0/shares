@@ -1,16 +1,14 @@
 import { platform } from './platform';
-import { getCLI } from './cli';
+import uiOptions from './inquireui';
 import { errorBoundary } from './errorboundary';
 /**
  * Takes the CLI and sanitizes user inputs before interacting with the 
  * platform
  * @see getCLI
  */
-export const cliInputs = () => {
+export const cliInputs = async () => {
 
-    const   cmd     = getCLI();
-            cmd.outputHelp();    
-    const   options = cmd.opts();
+    const   options = await uiOptions();
     console.log(options)
     // Step 1: Error boundary
     const {csv_path, share_price, errors} = errorBoundary(options.csv_path, options.source, options.share_price);
@@ -27,3 +25,5 @@ export const cliInputs = () => {
     platform(csv_path, share_price);
 
 }
+
+export default cliInputs;
