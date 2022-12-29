@@ -1,7 +1,11 @@
-import BigNumber            from 'bignumber.js';
-import fs                   from 'fs';
-import { TransactionType }  from '../models/payment';
+import BigNumber from 'bignumber.js';
+import fs from 'fs';
+import { TransactionType } from '../models/payment';
 
+
+/**
+ * The SanitizedInputs interface is used to return the sanitized inputs from the errorBoundary
+ */
 interface SanitizedInputs {
     csv_path:       string;
     source:         TransactionType;

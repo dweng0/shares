@@ -22,6 +22,7 @@
     ],
     "typedocOptions": {
         "entryPoints": ["src/index.ts", "src/controller/**/*", "src/models/**/*", "src/services/**/*"],
-        "out": "docs"
+        "out": "docs",
+        "exclude": "**/__tests__/*",
     }
 }

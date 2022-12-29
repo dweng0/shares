@@ -43,6 +43,8 @@ To generate documentation run
 ```
 It can then be found in the ```./docs``` folder. It was generated using TypeDoc.
 
+![TypeDoc](./supporting%20documentation/docs.png)
+
 This app uses a some open source projects for rendering the CLI, here are the main ones:
 
 - [Inquirer](https://github.com/SBoudrias/Inquirer.js#readme) - For rendering the CLI.
