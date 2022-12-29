@@ -3,6 +3,19 @@
 
 What does it do? Reads a CSV from a user specified path and outputs a csv of client shares 
 
+## Design
+![sequence diagram](./supporting%20documentation/sequencediagram.png)
+
+## Code Coverage
+To run the tests and generate code coverage run
+```bash
+    npm run test
+```
+It can then be found in the ```./coverage``` folder. 
+![Jest Coverage](./supporting%20documentation/coverage.png)
+
+![LCOV](./supporting%20documentation/lcov.png)
+
 ## The CLI
 
 Running 
@@ -24,16 +37,6 @@ this will build the app into javascript and it can be run using the following co
 ```
 
 ![The CLI](./supporting%20documentation/cli.gif)
-
-## Code Coverage
-To run the tests and generate code coverage run
-```bash
-    npm run test
-```
-It can then be found in the ```./coverage``` folder. 
-![Jest Coverage](./supporting%20documentation/coverage.png)
-
-![LCOV](./supporting%20documentation/lcov.png)
 
 ## Documentation
 
